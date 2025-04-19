@@ -21,26 +21,33 @@ export class UserService {
   }
   async register(data:CreateUserDto){
     let user = await this.findUser(data.username);
+    console.log(user);
     if(user ){
       throw new BadRequestException('user exists')
     }
     let hash = bcrypt.hashSync(data.password,10);
     let newUser = await this.user.create({
       username:data.username,
-      password:hash
+      password:hash,
+      role:data.role,
     });
     return newUser;
   }
   async login(data:CreateUserDto){
-    let user = await this.findUser(data.username);
-    if(!user){
-      throw new BadRequestException('user not exists')
-    }
-    let match = bcrypt.compareSync(data.password, user.password);
-    if(!match){
-      throw new UnauthorizedException('wrong credentials')
-    }
-    let token = this.jwt.sign({id:user._id});
-    return {token};
+    try{let user = await this.findUser(data.username);
+      if(!user){
+        throw new BadRequestException('user not exists')
+      }
+      let match = bcrypt.compareSync(data.password, user.password);
+      if(!match){
+        throw new UnauthorizedException('wrong credentials')
+      }
+      console.log(user.id);
+      let token = this.jwt.sign({id:user._id,role:user.role});
+      console.log(token);
+      return {token};
+    }catch(error){
+    throw new BadRequestException(error)
   }
+}
 }

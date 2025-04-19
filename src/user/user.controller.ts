@@ -15,6 +15,7 @@ export class UserController {
   login(@Body()user:CreateUserDto){
     return this.userService.login(user)
   }
+  
 }
 
   

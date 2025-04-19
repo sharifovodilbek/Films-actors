@@ -1,10 +1,8 @@
+// dto/create-actor.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateActorDto {
-  @ApiProperty({
-    example: 'SH Odilbek',
-    description: 'The name of the actor',
-    type: String,
-  })
+  @ApiProperty({ example: 'Tom Hanks' })
   name: string;
+
 }
